@@ -14,7 +14,36 @@ app.url_map.strict_slashes = False # esto me permite fenerar los url
 CORS(app) # permite la comunicacion entre la api y el frontend o entre el punto A y B
 
 # create the jackson family object
+
 jackson_family = FamilyStructure("jackson")
+
+
+Jhon = {
+    "id": jackson_family._generateId(),
+    "name":"John Jackson",
+    "age": "33 Years old",
+    "lucky_numbers": [7, 13, 22]
+}
+
+jackson_family.add_member(Jhon)
+
+Jane = {
+    "id": jackson_family._generateId(),
+    "name":"Jane Jackson",
+    "age":"35 Years old",
+    "lucky_numbers": [10, 14, 3]
+}
+
+jackson_family.add_member(Jane)
+
+Jimmy = {
+    "id": jackson_family._generateId(),
+    "name": "Jimmy  Jackson",
+    "age": "5 Years old",
+    "lucky_numbers": 1
+}
+
+jackson_family.add_member(Jimmy)
 
 
 # Handle/serialize errors like a JSON object
@@ -35,30 +64,31 @@ def handle_hello():
 
     # this is how you can use the Family datastructure by calling its methods
     members = jackson_family.get_all_members()
-    response_body = {
-        "miembros": members
-    }
+    #response_body = members
 
 
-    return jsonify(response_body), 200
+    return jsonify(members), 200
 
-@app.route('/member', methods = ['POST'])
+@app.route('/member', methods=['POST'])
+def add_member():
+     
 
-def add_member() :
-    nw_member = request.json
-    print(nw_member)
-   
-    jackson_family.add_member(nw_member)
-    return jsonify({"done": "usuario creado"}), 200
+    
+     new_member = request.json
 
+     success = jackson_family.add_member(new_member)
+     if success == True: 
+         
+        return jsonify(new_member), 200
+     return jsonify(success), 400
 
 @app.route('/member/<int:member_id>', methods = ['DELETE'])
 def delete_family_member(member_id) :
-    eliminar_familiar = jackson_family.delete_member(member_id)
-    if not eliminar_familiar:
+    success = jackson_family.delete_member(member_id)
+    if not success:
         return jsonify({"msj" : "familiar no encontrado"}), 400
     
-    return jsonify({"done":"familiar eliminado"})
+    return jsonify({"done":True})
     _
 
 @app.route('/member/<int:member_id>', methods= ['PUT'])

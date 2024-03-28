@@ -19,11 +19,7 @@ class FamilyStructure:
         self.last_name = last_name
 
         # example list of members
-        self._members = [ 
-              {"id": 1, "first_name": "John", "age": 33, "lucky_numbers": [7, 13, 22]},
-            {"id": 2, "first_name": "Jane", "age": 35, "lucky_numbers": [10, 14, 3]},
-            {"id": 3, "first_name": "Jimmy", "age": 5, "lucky_numbers": [1]}
-        ]
+        self._members = []
 
     # read-only: Use this method to generate random members ID's when adding members into the list
     def _generateId(self):
@@ -32,10 +28,21 @@ class FamilyStructure:
     def add_member(self, member):
         # fill this method and update the return
         #las lista tienen el append para a;adir cosas
-
-        if not member.get("id"): #se utilizan parentesis en vez de corchetes xq si python no lo consigue detectara error en cambio con () si no lo consigue cae en NULL
-             member["id"] = self._generateId() # crea id
+       #se utilizan parentesis en vez de corchetes xq si python no lo consigue detectara error en cambio con () si no lo consigue cae en NULL
+        id = member.get("id", None) 
+        if id != None: 
+            for person in self._members: 
+                if person.get("id") == id: 
+                    return {
+                        "msg": "Tu cedula era repetida asi que asigne una nueva"
+                    }
+        else: 
+            member["id"] = self._generateId() 
         self._members.append(member)
+        return True
+
+
+                 
         
 
 
